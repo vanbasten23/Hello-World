@@ -1,0 +1,102 @@
+/*
+ 22. get a date(mm/dd/yyyy) from user. Print exact the week of dates(Sun to Sat). 
+EXAMPLE:
+INPUT: Please input a date (dd/mm/yyyy): 03/04/2012
+OUTPUT: 
+1/4/2012/Sunday
+2/4/2012/Monday
+3/4/2012/Tuesday
+4/4/2012/Wednesday
+5/4/2012/Thursday
+6/4/2012/Friday
+7/4/2012/Saturday 
+*/
+
+#include <iostream>
+using namespace std;
+
+/*getndays() get the number of days in a month depending on if it's leap year or nonleap year*/
+int getndays(int month ,int year){
+    int ndaysOfMonth_leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int ndaysOfMonth_nonleap[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	
+    // leap year
+    if((year%4 == 0 && year%100 != 0) || year%400 == 0)
+        return ndaysOfMonth_leap[month - 1];
+    // nonleap year
+    else
+        return ndaysOfMonth_nonleap[month - 1];
+}
+
+/*getndays(int month, int day, int year): gets the number of days since 01/01/year.*/
+int getndays(int month, int day, int year){
+    int ndays=0;
+    for (int i=1; i<month; ++i){
+        ndays += getndays(i,year);//it's not "ndays += getndays(i-1,year)"
+    }
+    ndays += day;
+    return ndays;
+}
+
+int main(){
+    int month, day, year;
+    cout<<"Input month, day and year: "<<endl;
+    cin>>month>>day>>year;
+    if (year<0){
+        cout<<"wrong year"<<endl;
+        return -1;
+    }
+    if (month<1 || month>12){
+        cout<<"wrong month"<<endl;
+        return -1;
+    }
+    if (day<1 || day>getndays(month,year)){
+        cout<<"wrong day"<<endl;
+        return -1;
+    }
+    
+    /*dow = days of week = {Sunday, Monday, Tuesday, ... , Saturday}, we need to find what day is today. i.e. dow*/
+    string downame[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    int dow = ((year-1)*365 + (year-1)/4 - (year-1)/100 + (year-1)/400 + getndays(month, day, year)) % 7;
+    cout<<"The day of week is: "<<dow<<endl;
+    
+    /*Now we need to find the starting day of the week, i.e. the first sunday.*/
+    for (int i=dow-1; i>=0; --i){
+        if (day==1){
+            if (month==1){
+                year--;
+                month=12;
+                day = getndays(month,year);
+            }
+            else{
+                month--;
+                day = getndays(month,year);
+            }
+        }
+        day--;
+    }
+    
+    /*Now print the whole week*/
+    for (int i=0; i<7; ++i){
+        cout<<"mmddyyyy:"<<month<<day<<year<<" "<<downame[i]<<endl;
+        if (day==getndays(month,year)){
+            if (month==12){
+                year++;
+                month=1;
+                day=1;
+            }
+            else{
+                month++;
+                day=1;
+            }
+        }
+        day++;
+    }
+    return 0;
+}
+
+
+
+REMARK:
+1. Understand the meaning of the problem. The corner cases should be paid much attention.
+2. Remember how to calulate what day it is today(i.e. the formula), given mmddyyyy.
