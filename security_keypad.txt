@@ -1,0 +1,65 @@
+/*
+ There is a security keypad at the entrance of a building. It has 9 numbers 1 - 9 in a 3x3 matrix format.
+ 1 2 3
+ 4 5 6
+ 7 8 9
+ The security has decided to allow one digit error for a person but that digit should be horizontal or vertical. 
+ Example: for 5 the user is allowed to enter 2, 4, 6, 8 or for 4 the user is allowed to enter 1, 5, 7. If the security code to enter is 1478 and if the user enters 1178 he should be allowed. Write a function to take security code from the user and print out if he should be allowed or not
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    string realPW = "1478";
+    cout<<"the length of realPW is "<<realPW.length()<<endl;//has nothing to do with this problem, just to see the lengh of the string defined in this ways
+    cout<<"Input your password:"<<endl;
+    string guessPW;
+    cin>>guessPW;
+    cout<<"the length of guessPW is "<<guessPW.length()<<endl;//has nothing to do with this problem, just to see the lengh of the string defined in this ways
+    /*Check the input.*/
+    for (int i=0; i<guessPW.length(); ++i){
+        if (guessPW[i]<'0' || guessPW[i]>'9'){
+            cout<<"wrong input"<<endl;
+            return -1;
+        }
+    }
+    /*If the two strings have different length, then the input one must be incorrect.*/
+    if (realPW.length()!=guessPW.length()){
+        cout<<"The password is incorrect!"<<endl;
+        return -1;
+    }
+    
+    /*Note the starting digit in each string. The starting digits are its original digits.*/
+    string allPossibleDigit[]={"14723","21358","32169","41756","52468","63459","71489","82579","93678"};
+    
+    int count=0;
+    
+    for (int i=0; i<realPW.length();++i){
+        if (realPW[i]!=guessPW[i]){
+            bool flag=0;
+        for(int j=1; j<5; ++j){
+            if(guessPW[i]==allPossibleDigit[(realPW[i]-'0')-1][j]){
+                flag=1;
+                break;
+            }
+        }
+        if (flag==1) count++;
+        else{
+        cout<<"The password is incorrect!"<<endl;
+            return 0;
+        }
+        }
+    }
+    if (count<=1) cout<<"correct!"<<endl;
+    else cout<<"The password is incorrect!"<<endl;
+    return 0;
+}
+
+REMARK:
+1. We use string as input, which is easy and reasonable. It also can store char. So I discarded int arr[].
+2. NOTE: at line42, you need write
+ if(guessPW[i]==allPossibleDigit[(realPW[i]-'0')-1][j]){
+INSTEAD OF
+ if(guessPW[i]==allPossibleDigit[realPW[i]-1][j]){
+
