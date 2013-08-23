@@ -1,0 +1,70 @@
+/*
+ 33. Convert date from mmddyy to english words. Note: For simplicity, the rightmost two digits of year should be in the range:[1,31], the leftmost 2 digit should be either 19 or 20. 
+EXAMPLE:
+INPUT:
+Input day
+23
+input month
+6
+input year
+2002
+OUTPUT:
+June twenty-third,Two Thousand and two*/
+
+#include <iostream>
+using namespace std;
+
+
+/*getndays() get the number of days in a month depending on if it's leap year or nonleap year. This function is used in main so as to verify the input day is valid*/
+int getndays(int month ,int year){
+    int ndaysOfMonth_leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int ndaysOfMonth_nonleap[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    // leap year
+    if((year%4 == 0 && year%100 != 0) || year%400 == 0)
+        return ndaysOfMonth_leap[month - 1];
+    // nonleap year
+    else
+        return ndaysOfMonth_nonleap[month - 1];
+}
+
+int main(){
+int date, day, month, year;
+cout<<"Input date in the format mmddyyyy:"<<endl;
+cin>>date;
+/*Now we get the day, month, and year.*/
+year = date%10000;
+date = (int)(date/10000);
+month = date%100;
+date = (int)(date/100);
+day=date;
+cout<<"mmddyyyy is "<<month<<day<<year<<endl;
+
+/*Now we verify if the inputs are valid:*/
+if ((int)(year/100)!=19 || (int)(year/100)!=20){
+        cout<<"wrong year"<<endl;
+        return -1;
+}
+if (month<1 || month>12){
+        cout<<"wrong month"<<endl;
+        return -1;    
+}
+if (day<1 || day>getndays(month,year)){
+        cout<<"wrong day"<<endl;
+        return -1;
+}
+
+/*Now we output the english word corresponding to the date we just input.*/
+string nameDay[] = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "ninteenth", "twentieth", "twenty-first", "tweenty-second", "twenty-third", "twenty-fourth", "twenty-fifth", "twenty-sixth", "twenty-seventh", "twenty-eightth", "twenty-nineth", "thirtieth", "thirty-first"}; // note: word spell
+string nameMonth[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+string nameYear[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "ninteen", "twenty", "twenty-one", "tweenty-two", "twenty-three", "twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight", "twenty-nine", "thirty", "thirty-one"}; 
+
+cout<<nameMonth[month-1]<<" ";
+cout<<nameDay[day-1]<<",";
+if (year/100==20) cout<<"Two Thousand and ";
+else cout<<"Nighteen ";
+cout<<nameYear[year%100-1]<<endl;
+return 0;
+}
+
+
