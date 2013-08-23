@@ -1,0 +1,54 @@
+/*
+ 11. Find no. of days between Jan 1st and entered date. Assume the dates are in the same year. So the year depends on the input.
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    /*input year, month and day*/
+    int yy,mm,dd;
+    cout<<"input year, month, and day:"<<endl;
+    cin>>yy>>mm>>dd;
+    /*nMonthLeap and nMonthNonLeap are the number of days in each month.*/
+    int nMonthLeap[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int nMonthNonLeap[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    
+    /*Now verify if the input are valid.*/
+    if (yy<0){
+        cout<<"wrong year"<<endl;
+        return -1;
+    }
+    if (mm<1 || mm>12){
+        cout<<"wrong month"<<endl;
+        return -1;
+    }
+    if (yy%400==0 || (yy%4==0 && yy%100!=0)){
+        if (dd>nMonthLeap[mm-1] && dd<1){
+            cout<<"wrong day"<<endl;
+            return -1;
+        }
+    }
+    else{
+        if ( dd>nMonthNonLeap[mm-1] && dd<1){
+            cout<<"wrong day"<<endl;
+            return -1;
+        }
+    }
+    
+    int ndays=0;
+    for (int i=0; i<mm-1;++i){
+        if (yy%400==0 || (yy%4==0 && yy%100!=0))
+            ndays += nMonthLeap[i];
+        else ndays += nMonthNonLeap[i];
+    }
+    ndays += dd;
+    cout<<"The number of days is "<<ndays<<endl;
+    return 0;
+}
+
+
+
+REMARK:
+1 Idea is pretty straightforward. One thing to notice the original year is given as default.
+2. One thing to notice that: don't forget to initialize ndays = 0, otherwise you'll get weird result.
