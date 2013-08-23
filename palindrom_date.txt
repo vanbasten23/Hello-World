@@ -1,0 +1,69 @@
+/*
+ 8. Write a program to generate all palindrome dates by taking the beginning and the ending dates as an input from the user. The format of the date is given as MMDDYYYY. 
+
+That is, given a beginning datae and a ending date, you need to output all the palindrome dates between the beginning and ending date.
+*/
+
+#include <iostream>
+using namespace std;
+
+int date[4]={0};
+/*The argument y is the year in the main function.*/
+bool isPalindrome(int y){
+    /*we first need to get the 4 digit of the year, assume year=dgt4_dgt3_dgt2_dgt1.*/
+    int dgt1 = y%10;
+    int dgt2 = int(y/10)%10;
+    int dgt3 = int(y/100)%10;
+    int dgt4 = int(y/1000)%10;
+    date[0] = dgt1;
+    date[1] = dgt2;
+    date[2] = dgt3;
+    date[3] = dgt4;
+    
+    /*nMonthLeap and nMonthNonLeap are the number of days in each month.*/
+    int nMonthLeap[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int nMonthNonLeap[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    
+    /*Now determine date like MMDD=dgt1_dgt2_dgt3_dgt4 is valid.*/
+    int month = 10*dgt1 + dgt2;
+    int day = 10*dgt3 + dgt4;
+    
+    /*if num is leap year*/
+    if (y%400==0 || (y%4==0 && y%100!=0)){
+        if (month<=12 && month>=1 && day<=nMonthLeap[month-1] && day>0)
+            return true;
+        else return false;
+    }
+    else{
+        if (month<=12 && month>=1 && day<=nMonthNonLeap[month-1] && day>0)
+            return true;
+        else return false;
+    }
+}
+
+int main(){
+    int year1, year2;
+    cout<<"input the first year:"<<endl;
+    cin>>year1;
+    cout<<"input the second year:"<<endl;
+    cin>>year2;
+    /*check if year is appropriate.*/
+    if (year1<0 || year2<0)
+        cout<<"wrong year"<<endl;
+    /*loop through each year. each year corrensponds to a date.*/
+    for (int i=year1; i<=year2; ++i){
+        /*We check if the date corresponding to the year i is a palindrom.*/
+        if (isPalindrome(i)){
+            /*if the date is a palindrome, we output it.*/
+            for (int j=0; j<4; ++j)
+                cout<<date[j];
+            cout<<i;
+            cout<<endl;
+        }
+    }
+    return 0;
+}
+REMARK:
+1. First, the wrong idea is to loop through date from year1 to year2, eg: from 01012001 to 01012004. The correct idea is to loop through year. Each year corresponds to a unique palindrome number, we just need to verify if the palindrome is a valid date. Example: we have year 2001, then we reverse it to get 1002, then we determine if 10022001 is valid.
+
+
