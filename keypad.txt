@@ -1,0 +1,42 @@
+/*
+ 2 - ABC, 3- DEF, 4- GHI, 5-JKL, 6-MNO, 7- PQR, 8- STU, 9- VWXYZ. Each number represents the set of variables. When we input a number, it should be replaced by all possible conbination of the corresponding charactors. 
+ eg : if we enter 234, OUTPUT would be ADG,ADH....CFI.
+*/
+
+#include <iostream>
+using namespace std;
+
+string pad[] = {"0", "1", "ABC", "DEF", "GHI", "JKL", "MNO", "PQR", "STU", "VWXYZ"};
+
+/*The function below output all the possible combination of the key pad, given a string of numbers.*/
+void keypad(string str, int index){
+    if (index==str.length())
+        cout<<str<<endl;
+    else{
+        int num = str[index]-'0';
+        for (int i=0; i<pad[num].length(); ++i){
+            str[index] = pad[num][i];
+            keypad(str,index+1);
+            str[index] = num-'0';
+        }
+    }
+}
+
+int main(){
+    string str;
+    cout<<"Input an int string:"<<endl;
+    cin>>str;
+    for (int i=0; i<str.length(); ++i){
+        if (str[i]>'9'||str[i]<'0'){
+            cout<<"wrong input."<<endl;
+            return -1;
+        }
+    }
+    /*The next one line only to show the difference between str[index] and str[index]-'0'*/
+    cout<<"str[0] is: "<<str[0]<<", while str[0]-'0' is: "<<str[0]-'0';
+    keypad(str,0);
+    return 0;
+}
+REMARK:
+1. Hard question. Had no idea.
+2. Note on line 16 and 20, we use str[index]-'0' and num-'0' so as to convert a char into an int. EXAMPLE: int('4')=52, int('4'-'0')=4. VERY IMPORTANT!!!!!!!! ERROR PRONE!!!!
