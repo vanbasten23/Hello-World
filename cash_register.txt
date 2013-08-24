@@ -1,0 +1,65 @@
+/*
+ You are to write a program that simulates a cash register. 
+ For example, if something cost $10.25 and the customer pays with a $20 bill, the program will print out the most efficient "change-breakdown" which is 1 five, 4 ones, and 3 quarters.
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    float cost = 10.25;
+    float paid;
+    while(1){
+        cout<<"Pay for it now: "<<endl;
+        cin>>paid;
+        if (paid<cost){
+            cout<<"Not sufficient.Pay again."<<endl;
+        }
+        else break;
+    }
+    if (cost==paid){
+        cout<<"Exactly! Thank you."<<endl;
+        return 0;
+    }
+    else{
+        float diff = paid - cost;
+        int dollar20=diff/20;
+        diff -= dollar20 * 20;
+        int dollar10 = diff/10;
+        diff -= dollar10 * 10;
+        int dollar5 = diff/5;
+        diff -= dollar5 * 5;
+        int dollar1 = diff/1;
+        diff -= dollar1 * 1;
+        int quarter = (int)(diff/0.25);
+        diff -= quarter * 0.25;
+        int dime = (int)(diff/0.1);
+        diff -= dime * 0.1;
+        int cent5 = (int)(diff/0.05);
+        diff -= cent5 * 0.05;
+        int cent = (int)(diff/0.01);
+        /*Output*/
+        // output charge (only != 0)
+        if(dollar20 != 0)
+            cout<<"20 dollar: "<<dollar20<<" ";
+        if(dollar10 != 0)
+            cout<<"dollar10:"<<dollar10<<" ";
+        if(dollar5 != 0)
+            cout<<"dollar5:"<<dollar5<<" ";
+        if(dollar1 != 0)
+            cout<<"1 dollar:"<<dollar1<<" ";
+        if(quarter != 0)
+            cout<<"quarter:"<<quarter<<" ";
+        if(dime != 0)
+            cout<<"dime:"<<dime<<" ";
+        if(cent5 != 0)
+            cout<<"5 cent:"<<cent5<<" ";
+        if(cent != 0)
+            cout<<"cent:"<<cent<<endl;
+        return 0;
+	}    
+}
+
+REMARK:
+1. cost and paid should be float instead of int. Other than that, this problem is nother but tedious.
+
