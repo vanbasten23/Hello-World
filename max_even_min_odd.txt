@@ -1,0 +1,43 @@
+/*
+You have to create a program that accepts a stream of inputs from a user and when the user enters 0, the user has signal the end of their inputs.  From the stream of input, find the max and min, however the max must be an even number and the min must be an odd number.
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    int max, min;
+    /*Initialize the max and min to the first number that the user input.*/
+    cout<<"input a number, input 0 to stop: "<<endl;
+    int num;
+    cin>>num;
+    if (num<0){
+        cout<<"wrong number."<<endl;
+        return -1;
+    }
+    if (num==0) return 0;
+    else max = min = num;
+    while(1){
+        cout<<"input a number, input 0 to stop: "<<endl;
+        int num;
+        cin>>num;
+        if (num<0){
+            cout<<"wrong number."<<endl;
+            return -1;
+        }
+        
+        if (num==0)
+            break;
+        else if(num>max||num%2==0)
+            max = num;
+        else if (num<min || num%2==1)
+            min = num;
+    }
+    cout<<"The max and min are "<<max<<" and "<<min<<endl;
+    return 0;
+}
+
+
+REMARK:
+1. First obstacle, how to deal with the input:let the user input number one by one. Stop until the user input 0.  Solution: use a while loop.
+2. Given a series of number, we get the max and min of these number. We should initialize the max and min to be the first number in the series.
