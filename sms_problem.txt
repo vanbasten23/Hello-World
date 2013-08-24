@@ -1,0 +1,59 @@
+/*
+ SMS Problem
+ 0 - NULL, 1 - NULL, 2 - ABC, 3 - DEF, 4 - GHI, 5 - JKL, 6 - MON, 7 - PQRS, 8 - TUV, 9 - WXYZ, * - <Space>, # - <Break>
+ We must convert the numbers to text.
+ Eg: 22 - B, 23 - AD, 223 - BD, 22#2 - BA (# breaks the cycle), 3#33 - DE, 2222-22222#2 - 2A, 22222 - A (cycle must wrap around), 222222 - B
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    cout<<"input a string of number"<<endl;
+    string str;
+    cin>>str;
+    /*Verify the input*/
+    for (int i=0; i<str.length(); ++i){
+        if (!((str[i]<='9' && str[i]>='0')||str[i]=='#'||str[i]=='*')){
+            cout<<"wrong input!"<<endl;
+            return -1;
+        }
+    }
+    
+    string keypad[] = {"", "", "ABC2", "DEF3", "GHI4", "JKL5", "MON6", "PQRS7", "TUV8", "WXYZ9"}; // note: start from '2', add number at the end of array.
+    int i=0, j=0, n = str.length();//n is the length of the original string.
+    while(i<n){
+        if (str[i]=='#'){
+            i++;
+            continue;
+        }
+        else if (str[i]=='*'){
+            str[j++]=' ';
+            i++;
+            continue;
+        }
+        else{
+            int count = 0;
+            while(str[i]==str[i+1]){
+                if (i==n-1){
+                    count++;
+                    break;
+                }
+                count++;
+                i++;
+                
+            }
+            str[j]=keypad[str[i]-'0'][(count)%(keypad[str[i]-'0'].length())];
+            j++;
+            i++;
+        }
+    }
+    cout<<"The sms is ";
+    for (int i=0; i<j; ++i)
+        cout<<str[i];
+    cout<<endl;
+    return 0;
+}
+
+REMARK:
+1. The idea is pretty straightforward. In the outer while loop, you just need to see which case is in: a#, a* or a digit.
