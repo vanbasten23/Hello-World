@@ -1,0 +1,52 @@
+/*
+ Generate all possible unique 4 digit numbers such that no two adjacent numbers are the same and any number starting with 4 should end with a 4. 
+ Eg 1234 , 1232 are both correct but 1223 is not .
+*/
+
+#include <iostream>
+using namespace std;
+int cnt=0;
+
+void genUnique4num(int arr[], int length, int index){
+    if (index==length){
+        if (arr[0]==4 && arr[3]!=4)
+            return;
+        for (int i=0; i<length-1; ++i){
+            if (arr[i]==arr[i+1]) return;
+        }
+        //In this case, this is a valid number, print it
+        for (int i=0; i<length; ++i)
+            cout<<arr[i];
+        cnt++;
+        cout<<endl;
+        return;
+    }
+    else{
+        for (int i=0; i<length; ++i)
+            for (int j=0; j<=9; ++j){
+                arr[i]=j;
+                genUnique4num(arr,length,index+1);
+            }
+    }
+}
+
+
+int main(){
+    int arr[4]={0};
+    genUnique4num(arr,4,0);
+    cout<<"the number of such number:"<<cnt<<endl;
+    return 0;
+}
+
+REMARK:
+1. For the global variable, you cannot use count, otherwise you'll get error saying: Reference to "count" is ambigous. Here is the explanation: http://stackoverflow.com/questions/11271889/global-variable-count-ambiguous
+
+The problem is all because of the second line here:
+
+#include <algorithm>
+using namespace std;
+The line using namespace std brings all the names from <algorithm> which also has a function called count, and in your code, you've declared a variable count. Hence the ambiguous error.
+
+The solution is to never write using namespace std. It is bad bad bad.
+
+Instead, use std::cout, std::cin, std::endl, std::count and so on, in your code.
