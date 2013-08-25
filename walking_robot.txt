@@ -1,0 +1,30 @@
+/*
+ Glitch is a walking robort moves in a peculiar problem: it takes x steps forward , then x+1 steps backward, then 2x steps forward, x+2 steps backward,3x steps forward x+3 steps backward , and so on... until it has taken y steps,glitch turns 180 degrees before continuning with its pattern . write a program that prompts x and y and total number of steps taken and outputs how many steps away from its starting point
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+int x,y;
+cout<<"input x:"<<endl;
+cin>>x;
+cout<<"input y"<<endl;
+cin>>y;
+if (x<1||y<1){
+cout<<"wrong input:"<<endl;
+return -1;
+}
+
+int location=0, i=1;
+while(i<=y){
+location += i*x;
+location -= (i+x);
+cout<<"at the "<<i<<"-th step, we are at location: "<<location<<endl;
+i++;
+}
+cout<<"The final location is: "<<location<<endl;
+return 0;
+}
+
+
