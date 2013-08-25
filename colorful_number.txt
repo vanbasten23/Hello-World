@@ -1,0 +1,81 @@
+/*
+Determine whether a number is colorful or not. 263 is a colorful number because (2,6,3,2x6,6x3,2x3x6) are all different whereas 236 is not because (2,3,6,2x3,3x6,2x3x6) have 6 twice. So take all consecutive subsets of digits, take their product and ensure all the products are different
+Hard one, didn't do that at first. BUT NOTE: we make the length of the production[] as 10, this might be insufficient for some large input. Just for simplicity, we set the size as 10. 
+*/
+
+
+# include <stdio.h>
+# include <string.h>
+# define N 10
+
+bool is_colorful(int num, int * production, int len){
+	int i;
+	// check [0.len-1]
+	for(i = 0; i < len; i++){
+		if(production[i] == num)
+			return false;
+	}
+	// inseart [len]
+	production[len] = num;
+	return true;
+}
+
+int main(){
+	// input
+	char str[N]; // note: char, easy to input
+	int production[N]; // note: int, easy to compute: record production
+	printf("Please input an integer: ");
+	gets(str);
+    
+	// check input
+	int i;
+	for(i = 0; i < strlen(str); i++){
+		if(str[i] < '0' || str[i] > '9'){
+			printf("Invalid input integer: %c.\n", str[i]);
+			return -1;
+		}
+	}
+	
+	// calculate: all continue substr
+	int j, k, len, num;
+	len = 0;
+	//  i: start index
+	for(i = 0; i < strlen(str); i++){
+		// j: substr length
+		for(j = 1; j < strlen(str)+1 - i; j++){
+			// k: continuous product
+			num = 1;
+			k = 0;
+			while(k < j){
+				num = num * (str[i + k] - '0'); // note: char -> int
+				k++;
+			}
+			if(!is_colorful(num, production, len)){
+				printf("%s is not colorful.\n", str);
+				return 0;
+			}
+			len++;
+		}
+	}
+	
+	// output
+	printf("%s is colorful.\n", str);
+
+}
+
+
+
+
+REMARK:
+1. In the code, i is the start index, j is the length of the substring, k is used to get the product, len is the current index of the production[N].The idea is to store the production we get into the array production[N]. We get the production in this way:
+EXAMPLE, given 236, we check in this order:
+2
+2*3
+2*3*6
+3
+3*6
+6
+and then check if this value are in the production[N].
+
+2 FOLLOWUP:
+What if we get rid of the condition "consecutive" and change the problem into " So take all consecutive subsets of digits, take their product and ensure all the products are different". How should we do that?
