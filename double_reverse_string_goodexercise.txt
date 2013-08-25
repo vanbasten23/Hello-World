@@ -1,0 +1,102 @@
+/*
+ Reverse the words of a string in the place. i.e This is great -> great is This
+wxf: great exercise.
+*/
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+void reverse(char *str, int start, int end){
+    char temp;
+    while(start<end){
+        temp = str[start];
+        str[start] = str[end];
+        str[end]= temp;
+        start++;
+        end--;
+    }
+
+}
+
+int main(){
+    cout<<"Input a sentense:"<<endl;
+    char sentence[30];
+    gets(sentence);
+    
+    /*reverse the whole string*/
+    reverse(sentence,0,strlen(sentence)-1);
+    
+    /*reverse the substrings*/
+    int start=0, end;
+    for (int i=0; i<strlen(sentence); i++){
+        if (sentence[i]==' '|| sentence[i]=='\0' ){
+            end=i-1;
+            reverse(sentence,start,end);
+            start=i+1;
+        }
+    }
+    
+    cout<<sentence<<endl;
+}
+
+REMARK:
+1. Hard one! And great. learned a lot from it.
+2. IDEA: 
+step1: use the function reverse() to reverse the whole sentence(i.e. from 0 to sentence.lengt()-1)
+step2: reverse every word in the sentence.
+3. In the code, I use 
+char sentence[30]
+gets()
+strlen(sentence)
+Note:gets():Reads characters from the standard input (stdin) and A terminating null character is automatically appended after the characters copied to str.
+In addition, the reason I use char sentence[] is that it's convenient to pass as a parameter to the function and make change on it.
+4. Question: how should I change the content in a string if I pass a string as a parameter to change it
+At first I use a string to store the input but I finally found out 
+1)I cannot change the content of the string. Solution: use a reference in the function's argument.
+2)By using cin>>sentence; I cannot read in the whole sentence with space. I can only read in the first word until I hit the space. Solution: use getline(cin, string).
+3) Using getline(cin,string) does not add a '\0' automatically, you have to change the stop condition a little bit.
+
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+void reverse(string &str, int start, int end){
+    char temp;
+    while(start<end){
+        temp = str[start];
+        str[start] = str[end];
+        str[end]= temp;
+        start++;
+        end--;
+    }
+
+}
+
+int main(){
+    cout<<"Input a sentense:"<<endl;
+    string sentence;
+    //cin>>sentence;
+    getline(cin,sentence);
+    cout<<sentence.length()-1<<endl;
+    /*reverse the whole string*/
+    reverse(sentence,0,sentence.length()-1);
+    cout<<sentence<<endl;
+
+    /*reverse the substrings*/
+    int start=0, end;
+    for (int i=0; i<sentence.length(); i++){
+        if (sentence[i]==' '){
+            end=i-1;
+            reverse(sentence,start,end);
+            start=i+1;
+        }
+        if (i==sentence.length()-1){
+            end=i;
+            reverse(sentence,start,end);
+        }
+    }
+    cout<<sentence<<endl;
+}
+
