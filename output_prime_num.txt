@@ -1,0 +1,39 @@
+/*
+ Write a program to generate all prime numbers from 2 to N, given a positive integer N.
+Example:
+Input: 9
+Output: 
+prime: 2
+prime: 3
+prime: 5
+prime: 7
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    cout<<"Input a number: "<<endl;
+    int N;
+    cin>>N;
+    if (N<=1){
+        cout<<"wrong input!"<<endl;
+        return -1;
+    }
+    
+    cout<<"prime: 2"<<endl;
+    for (int i=3; i<=N; ++i){
+        bool flag = true; //indicate if the number is prime.
+        for (int j=2; j*j<=i; ++j){
+            if (i%j==0){
+                flag=false;
+                break;
+            }
+        }
+        if (flag==true) cout<<"prime: "<<i<<endl;
+    }
+    return 0;
+}
+
+REMARK
+1. Pay attention the location we put the "bool flag", we should put it right after the start of the outer loop because we need to initialize the indicator flag every time we examine a new number. 
