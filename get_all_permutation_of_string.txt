@@ -1,0 +1,106 @@
+/*
+ get a string(word) from user, then make every possible permutation words.
+ Eg: intput: tree => output : tree, rtee, rete, reet, etre, eetr, eert, eter, eret, teer, reet...
+ RECURSION
+*/
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int cnt=0;
+
+void swap(char *a, char *b){
+	char temp;
+	temp = *a ;
+	*a = *b;
+	*b = temp;
+}
+
+/*permutation1() outputs all the permutation(with duplicate). len is the length of the string.*/
+void permutation1(string str, int len, int index){
+    if (index==str.length()){
+        cout<<str;
+        cout<<endl;
+        cnt++;
+        return;
+    }
+    else{
+        for (int i=index;i<len; ++i ){
+            swap(str[index],str[i]);
+            permutation1(str,len,index+1);
+            swap(str[index],str[i]);
+        }
+    }
+}
+
+void permutation2(string str){
+    sort(str.begin(),str.end());
+    do{
+        cout<<str<<endl;
+        cnt++;
+    }while (next_permutation(str.begin(),str.end()));
+}
+
+long long fact(int n){
+    long long result=1;
+    int i=1;
+    while(i<=n){
+        result *= i;
+        i++;
+    }
+    return result;
+}
+
+/*Given a string, we swap the string[m] and string[n]*/
+void swap2(string &str,int m, int n){
+	char temp;
+	temp = str[m] ;
+	str[m]=str[n];
+	str[n] = temp;
+}
+
+/*For every specific integer k, we have one differenct permutation. NOTE:Not all.*/
+void permutation3(int k, string &str)
+{
+    for(int j = 1; j < str.size(); ++j)
+    {
+        swap2(str, k % (j + 1), j);
+        k = k / (j + 1);
+    }
+}
+
+int main(){
+    cout<<"Input a word:"<<endl;
+    string word;
+    cin>>word;
+    //permutation1(word,word.length(),0);
+    
+    //permutation2(word);
+    //cout<<cnt<<endl;
+    
+    /*permutation3()*/
+    cout<<word.length()<<endl;
+    long long fac = fact(word.length());
+    cout<<fac<<endl;
+    for (int i=0; i<fac; ++i){
+        permutation3(i, word);
+        cout<<word<<endl;
+    }
+
+    return 0;
+}
+
+REMARK:
+1. Did not know how to do at first. Hard one. The code above includes 3 different solution: permutation1(),permutation2(), permutation3()
+2. IDEA of permutation1(): recursive method. Duplicate is included.
+step1. We choose the leftmost digit. So we swap the leftmost digit with the rest other digits.
+step2. After we fix the leftmost digit, we use the same method to get the permutation from the second leftmost digits to the last digit by recursively calling permutation1()
+step3. We restore the first digit and prepare for the next swap.
+3. IDEA of permutation2(): We use the built-in function in the library <algorithm>. We must sort the string in ascending order at the very first. No duplicate is included.
+
+Rearranges the elements in the range [first,last) into the next lexicographically greater permutation.
+RETURN: true if the function could rearrange the object as a lexicographicaly greater permutation.
+Otherwise, the function returns false to indicate that the arrangement is not greater than the previous, but the lowest possible (sorted in ascending order).
+
+4. IDEA of permutation3(): very fancy one, each time the permutation3() one generate only 1 permutation corresponding to k. In order to get all the permutations, you need to ge the number of the whole permuation. Duplicate is included.
