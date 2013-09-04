@@ -1,0 +1,65 @@
+/*
+ Given a year, print the calendar. The output is like:Year: 2013, Month: August, Day: 22, Date of week: Thursday
+*/
+# include <stdio.h>
+
+int main(){
+	// input
+	int y;
+	printf("Please input a year: ");
+	scanf("%d", &y);
+    
+	// check input
+	if(y < 1){
+		printf("Invalid input year.\n");
+		return -1;
+	}
+    
+	// output
+	int dom_leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int dom_nonleap[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	char * map_m[] = {"January", "February", "March", "April", "May", "June", "July","August", "September", "Octobor", "November", "December"};
+	char * map_dow[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+	int i, j, count;
+	count = 1; // note: start from 1
+	for(i = 0; i < 12; i++){
+		// leap year
+		if((y%4 == 0 && y%100 != 0) || y%400 == 0){
+			for(j = 0; j < dom_leap[i]; j++){
+				// output: year
+				printf("Year: %d, ", y);
+				// output: month
+				printf("Month: %s, ", map_m[i]);
+				// output: day
+				printf("Day: %d, ", j + 1);
+				// output: dow
+				printf("Date of week: %s \n", map_dow[((y-1)*365 + (y-1)/4 - (y-1)/100 + (y-1)/400 + count) % 7]); // note: formula
+				count++;
+			}
+		}
+		// nonleap year
+		else{
+			for(j = 0; j < dom_nonleap[i]; j++){
+				// output: year
+				printf("Year: %d, ", y);
+				// output: month
+				printf("Month: %s, ", map_m[i]);
+				// output: day
+				printf("Day: %d, ", j + 1);
+				// output: dow
+				printf("Date of week: %s \n", map_dow[((y-1)*365 + (y-1)/4 - y/100 + y/400 + count) % 7]);
+				count++;
+			}
+		}
+		printf("\n");
+	}
+}
+
+
+REMARK:
+1. The important and hard thing is to calculate what day is is today, like Monday, Tuesday ... Sunday. The key is to remember to formula: 
+
+char * map_dow[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+count = 1; // note: start from 1
+map_dow[((y-1)*365 + (y-1)/4 - (y-1)/100 + (y-1)/400 + count) % 7]); 
+
