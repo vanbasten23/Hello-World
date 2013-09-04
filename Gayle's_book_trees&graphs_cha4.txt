@@ -1,0 +1,144 @@
+/*cracking coding interview 4.5:implement a method to check if a binary tree is a binary search tree.
+ */
+
+/*solution1, use In-Order Traversal with extra space(int arr[]).IDEA: if a binary tree is binary search tree iff the in-order is in ascending order. So we store the in-order in an array to check if it is ascending.*/
+void copyBST(TreeNode *root, int arr[]){
+	if (root==NULL) return;
+	copyBST(root->lchild, arr);
+	arr[index++]=root->data;
+	copyBST(root->rchild,arr);
+}
+
+bool checkBST(TreeNode *root){
+	int *arr = new int[root.size];
+	copyBST(root,arr);
+	int i=0;
+	while(i<size-1){
+		if (arr[i]>arr[i+1]) return false;
+	}
+	return true;
+}
+
+/*solution2, IDEA: Similar to the solution1,use In-Order Traversal but without the extra space.initialize int last to be the leftmost node's value in the tree.*/
+int last = (the minimum integer in the tree);
+bool checkBST(TreeNode *root){
+	if (root==NULL) returl true;//note,it return true not false;
+	if(!checkBST(root->lchild)) return false;
+	if (root->data<last) return false;
+	last = root->data;
+	if (!checkBST(root->rchild)) return false;
+	return true;//note:don't forget to add this line.
+}
+
+/*solution3.IDEA: keep updating max and min. Then check if the root->data is within the range[min,max]. initialize the min to be the minimum number in the tree and the max to be the maximum number in the tree. To get that is easy, just walk through the leftmost branck and the rightmost branch.
+ */
+bool checkBST(TreeNode *root, int min, int max){
+	if (root==NULL) return true;
+	if (root->data<min || root->data>max) return false;
+	if (!checkBST(root->lchild,min,root->data)) return false;
+	if (!checkBST(root->rchild,root->data,max)) return false;
+	return true;//note:don't forget to add this line.
+}
+
+/*4.6: write an algorithm to find the 'next' node(i.e., in-order successor) of a given node in abinary search tree. You may assume that each node has a link to its parent.
+ */
+/*IDEA:too easy, refer to the pseudo code on page229.*/
+TreeNode inorderSucc(TreeNode *node){
+if (node==NULL) return NULL;
+if (node->lchild!=NULL || node->parent!=NULL)//?Why do we need to add "node->parent!=.."
+	return findleftmostnode(node->lchild);
+else{
+	while(node->parent->lchild != node && node->parent!=NULL){
+		node = node->parent;
+	}
+	return node->parent;
+}
+}
+TreeNode findleftmostnode(TreeNode *node){
+	if (node==NULL)
+		return NULL;
+	while(node->lchild){
+	node = node->lchild;
+	}
+	return node;
+}
+
+/*4.7: Design an algorithm and write code to find the first common ancestor of two nodes in a binary tree. Avoid storing additional nodes in a data structure. NOTE: This is not necessarily a binary search tree.
+ */
+
+/*solution1,assuming  we don't have linkes to parents.IDEA: IF p and q are both on the left of the node, branch left to look for the common ancestor. If they are both on the right, branch right to look for the common ancestor. When p and q are no longer on the same side, you must have found the first common ancestor*/
+bool covers(TreeNode *root, TreeNode *p){
+	if (root==NULL) return false;
+	if (root==p) return true;
+	return covers(root->lchild,p)||covers(root->rchild);
+}
+
+TreeNode commonAncestorHelper(TreeNode *root, TreeNode *p, TreeNode *q){
+	if (root==NULL) return NULL;
+	if (root=p || root=q) return root;
+	bool isCoveredp = covers(root->lchild,p);//check if left tree covers p
+	bool isCoveredq = covers(root->lchild,q);//check if left tree covers q
+	if (isCoveredp!=isCoveredq) return root;
+	else{
+		TreenNode nextNode = isCoveredp?root->lchild:root->rchild;
+		return commonAncestorHelper(root, nextNode);
+}
+}
+
+/*solution2: too confusing, skip it*/
+
+/*4.8:You have two very large binary trees:T1, with millions of nodes, and T2, with hundreds of nodes. Create an algorithm to decide if T2 is a subtree of T1. Definition: A tree T2 is a subtree of T1 if there exists a node n in T1 such that the subtree of n is identical to T2. That is, if you cut off the tree at node n, te two trees would be identical.*/
+/*solution1: 3 points to be noted:(1)need to check in-order;(2)need to check pre-order;(3)for the above 2 points,need to use special character in the in-order and pre-order.*/
+
+/*solution2. IDEA: search through the larger tree T1. Each time a node in T1 matches the root of T2 call treeMatch which check if the whole tree matches.*/
+bool containsTree(TreeNode *t1,TreeNode *t2){
+	if (t1==NULL) return false;
+	if (t2==NULL) return true;
+	return subtree(t1,t2);
+}
+bool subtree(TreeNode *t1, TreeNode *t2){
+	if (t1==NULL) return false;
+	if (t1->data==t2->data) return matchTree(t1,t2);
+	return matchTree(t1->lchild,t2)||match(t1->rchild,t2);
+}
+bool matchTree(TreeNode *t1,TreeNoe *t2){
+	if (t1==NULL&&t2==NULL) return true;
+	if (t1==NULL||t2==NULL) return false;
+	if (t1->data!=t2->data) return false;
+	if (!matchTree(t1->lchild,t2->lchild)||!matchTree(t1->rchild,t2->rchild)) return false; 
+	return true;
+}
+
+/*4.9. You are given a binary tree in which each node contains a value. Design an algorithm to print all paths which sum to a given value. Note that a path can start or end anywhere in the tree.*/
+/*solution:IDEA:We walk through every node. On every node, we look "up"(means to search from this node to the root) to see if we've found the sum. That is, rather than asking "Does this node start a path with the sum?", we ask, "Does this node complete a path with the sum?"*/
+void findsum(TreeNode *node, int sum, int path[], int level){
+	if (node==NULL) return;
+	path[level] = node->data;
+	//IMPORTANT: Look for paths with a sum that ends at this node.
+	int sum2=0;
+	for (int i=level; i>=0; --i){
+	sum2 += path[level];
+	if (sum2==sum) print(path,i,level);
+	}
+	findsum(node->lchild,sum,path,level+1);
+	findsum(node->rchild,sum,path,level+1);
+	
+}
+
+void findsum(TreeNode *root,int sum){
+	if(root==NULL) return;
+	int depth = depth(root);
+	int *path = new int[depth];
+   	findsum(root,sum,path,0);	
+}
+
+void print(int path[], int i, int level){
+	for (int j=level; j>=i; --j){
+		cout<<path[j]<<" ";
+	}
+}
+
+int depth(TreeNode *root){
+	if (root=NULL) return 0;
+	return 1+max(depth(root->lchild),depth(root->rchild));
+}
