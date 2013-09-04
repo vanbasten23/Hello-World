@@ -1,0 +1,44 @@
+/*
+ Print the consecutive sequences separated by semicolon from the input given by the user
+ Eg: 4678912356012356
+     output: 6789;123;56;0123;56;
+*/
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    string str;
+    cout<<"Input a sequence of digit like  4678912356012356:"<<endl;
+    cin>>str;
+    /*verify the input*/
+    for (int i=0; i<str.length(); ++i){
+        if (str[i]<'0' || str[i]>'9'){
+            cout<<"wrong input."<<endl;
+            return -1;
+        }
+    }
+    
+    
+    /*"end" is used as flag if str[i] + 1 == str[i + 1]*/
+    int end=0;
+	for(int i = 0; i < str.length() - 1; i++){ // note: [0, strlen() - 1)
+		// belongs to sequence
+		if(str[i] + 1 == str[i + 1]){
+			cout<<str[i]; // note: directly output, no saving space
+			end = 1;
+            
+			if(i == str.length() - 2) // note: the last charactor
+				cout<<str[i+1];
+		}
+		// not belongs to sequence
+		else{
+			// belong -> not belong
+			if(end == 1){
+				cout<<str[i]<<";";
+				end = 0;
+			}
+		}
+	}
+    return 0;
+}
